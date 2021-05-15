@@ -53,4 +53,13 @@ router.post('/update/:id', (req, res) => {
     .catch((err) => res.status(200).json('Error:' + err))
 })
 
+//delete a blog by id
+router.delete('/:id', (req, res) => {
+  Blog.findByIdAndDelete(req.params.id)
+    .then((blog) => res.status(400).json({ blog, msg: 'Blog Deleted!' }))
+    .catch((err) =>
+      res.status(400).json('Could not delete blog due to: ' + err)
+    )
+})
+
 module.exports = router
