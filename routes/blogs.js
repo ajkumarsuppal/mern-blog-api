@@ -36,21 +36,20 @@ router.route('/add').post((req, res) => {
 })
 
 //edit a blog by id
-router.post('/update/:id', (req, res) => {
-  Blog.findById(req.params.id)
+router.put('/:id', (req, res) => {
+  Blog.findByIdAndUpdate(req.params.id, req.body, { new: true })
     .then((blog) => {
-      blog.title = req.body.title
-      blog.author = req.body.author
-      blog.content = req.body.content
-
-      blog
-        .save()
-        .then((blog) => res.status(200).json({ blog, msg: 'Blog updated!!' }))
-        .catch((err) =>
-          res.status(400).json('Blog could not be updated due to ' + err)
-        )
+      if (blog) {
+        return res
+          .status(200)
+          .json({ blog, success: true, msg: 'Blog successfully updated!' })
+      } else {
+        return res
+          .status(200)
+          .json({ success: false, msg: 'No such data exist' })
+      }
     })
-    .catch((err) => res.status(200).json('Error:' + err))
+    .catch((err) => res.status(400).json('Error: ' + err))
 })
 
 //delete a blog by id
